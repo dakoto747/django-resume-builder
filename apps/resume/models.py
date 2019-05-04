@@ -6,7 +6,8 @@ class ResumeItem(models.Model):
     A single resume item, representing a job and title held over a given period
     of time.
     """
-    user = models.ForeignKey('auth.User')
+    resume = models.ForeignKey('Resume',
+        on_delete=models.CASCADE)
 
     title = models.CharField(max_length=127)
     company = models.CharField(max_length=127)
@@ -22,3 +23,15 @@ class ResumeItem(models.Model):
                                           self.title,
                                           self.company,
                                           self.start_date.isoformat())
+
+class Resume(models.Model): 
+    """
+    A single resume, holding all resume items for a resume. 
+    """
+
+    user = models.ForeignKey('auth.User')
+
+    title = models.CharField(max_length=127, default='Default Resume')    
+    description = models.TextField(max_length=2047, blank=True)
+
+    creation_date = models.DateTimeField(auto_now_add=True)
