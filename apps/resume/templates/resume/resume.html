@@ -62,13 +62,13 @@ Template for viewing a resume.
     <a class="btn btn-success" href="/resume/create/">Add New Resume</a>
     {% for resume in resumes %}
       <section class="resume-item">
-        <h3><a href="/resume_items/{{ resume.id }}">{{ resume.title }}</a></h3>
+        <h3><a href="/resume_items/{{ resume.id }}/">{{ resume.title }}</a></h3>
         {% if resume.description %}<p>{{ resume.description }}</p>{% endif %}
         <h4>{{ resume.creation_date | date:"M Y"}} </h4>
         <a class="btn btn-primary" href="/resume/edit/{{ resume.id }}/">Edit Details</a>
       </section>
     {% endfor %}
-
+    <a class="btn btn-primary" href="/resume/edit/{{ resume.id }}/">Synchronize existing resume items</a>
     
   </div>
 {% endblock %}

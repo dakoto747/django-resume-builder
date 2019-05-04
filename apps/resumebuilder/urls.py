@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^$', RedirectView.as_view(pattern_name='resume')),
 
     url(r'^resume/$', resume_views.resume_view, name='resume'),
-    url(r'^resume_items/$', resume_views.resume_view, name='resume'),
+    url(r'^resume_items/(\d+)/$', resume_views.resume_items_view, name='resume-items'),
 
     url(r'^resume/edit/(\d+)/$', resume_views.resume_edit_view,
         name='resume-edit'),

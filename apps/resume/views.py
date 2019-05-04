@@ -23,7 +23,7 @@ def resume_view(request):
 
 
 @login_required
-def resume_item_view(request, resume_id):
+def resume_items_view(request, resume_id):
     """
     Handle a request to view a user's resume.
     """
@@ -66,11 +66,12 @@ def resume_item_create_view(request, resume_id):
     if request.method == 'POST':
         form = ResumeItemForm(request.POST)
         if form.is_valid():
-            resumes = Resume.objects\
+            resume = Resume.objects\
             .get(id=resume_id)
         
             new_resume_item = form.save(commit=False)
             new_resume_item.resume = resume
+            new_resume_item.user = request.user
             new_resume_item.save()
 
             return redirect(resume_item_edit_view, new_resume_item.id)
@@ -89,6 +90,7 @@ def resume_edit_view(request, resume_id):
     """
     try:
         resume = Resume.objects\
+            .filter(user=request.user)\
             .get(id=resume_id)
     except ResumeItem.DoesNotExist:
         raise Http404

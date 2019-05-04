@@ -53,11 +53,9 @@ Template for viewing a resume.
 {% block content %}
   <div class="container content-section resume-container">
     <div class="header-center-container">
-      <div class="header-container">
-        <h1>{{ resume.title }}</h1>
-        <p>{{ resume.creation_date }}</p>
+        <h2>{{ resume.title }}</h2>
+        <p>Created on: {{ resume.creation_date }}</p>
         <p>{{ resume.description }}</p>
-      </div>
     </div>
 
     {% for resume_item in resume_items %}
