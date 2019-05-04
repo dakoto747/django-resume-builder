@@ -68,7 +68,9 @@ Template for viewing a resume.
         <a class="btn btn-primary" href="/resume/edit/{{ resume.id }}/">Edit Details</a>
       </section>
     {% endfor %}
-    <a class="btn btn-primary" href="/resume/edit/{{ resume.id }}/">Synchronize existing resume items</a>
     
+    {% if not all_resumes_synced %} <a class="btn btn-primary" href="/synchronize_resumes/">Synchronize existing resume items</a>
+    <p>Create a new resume so that you can synchronize existing items</p>
+    {% endif %}
   </div>
 {% endblock %}

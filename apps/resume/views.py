@@ -7,6 +7,32 @@ from .models import ResumeItem, Resume
 
 
 
+@login_required
+def synchronize_resumes_view(request):
+    
+    phantom_resume_items = ResumeItem.objects\
+        .filter(user=request.user)\
+        .filter(resume__isnull=True)
+
+    #todo: additionally, we could list out all the resume items and add a "move" option 
+    all_resumes = Resume.objects\
+        .filter(user=request.user)
+
+    if not all_resumes.exists():
+        return render(request, 'resume/resume.html', {
+            'all_resumes_synced': False,
+        })
+
+    default_resume = all_resumes[0]
+    for resume_item in phantom_resume_items: 
+        resume_item.resume = default_resume
+        resume_item.save()
+    
+    return render(request, 'resume/resume.html', {
+        'all_resumes_synced': True,
+        'resumes': all_resumes,
+        'synchronized_resume': default_resume.title
+    })
 
 @login_required
 def resume_view(request):
@@ -25,7 +51,7 @@ def resume_view(request):
 @login_required
 def resume_items_view(request, resume_id):
     """
-    Handle a request to view a user's resume.
+    Handle a request to view a items belonging to a resume.
     """
     resume = Resume.objects\
             .get(id=resume_id)
@@ -43,7 +69,7 @@ def resume_items_view(request, resume_id):
 @login_required
 def resume_create_view(request):
     """
-    Handle a request to create a new resume item.
+    Handle a request to create a new resume.
     """
     if request.method == 'POST':
         form = ResumeForm(request.POST)
@@ -84,9 +110,9 @@ def resume_item_create_view(request, resume_id):
 @login_required
 def resume_edit_view(request, resume_id):
     """
-    Handle a request to edit a resume item.
+    Handle a request to edit a resume.
 
-    :param resume_item_id: The database ID of the ResumeItem to edit.
+    :param resume_id: The database ID of the Resume to edit.
     """
     try:
         resume = Resume.objects\
